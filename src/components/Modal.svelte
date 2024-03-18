@@ -1,10 +1,21 @@
 <script>
     import { onMount } from "svelte";
+    import Comment from "./Comment.svelte";
 	export let showModal; // boolean
     export let postInfo; // object
+    export let isComments; //bool
 	let dialog; // HTMLDialogElement
 	let section = "";
+  let showingComments = false;
 
+  $: {
+    if (isComments) {
+      showingComments = true;
+    } else {
+      showingComments = false;
+    }
+  }
+  
 	$: if (dialog && showModal) dialog.showModal();
 
     const copy = async () => {
@@ -24,24 +35,38 @@
 	on:click|self={() => {
 		dialog.close()
 		}}
-    on:wheel|preventDefault|nonpassive
 >
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div class="modal" on:click|stopPropagation>
         <div class="modal-content">
             <div class="content">
                 <div class="article-info">
-                        <h1 class='header'>{postInfo.title}</h1>
-                        <img src={postInfo.image_url} alt="">
-                        <div class="tags">
-                            <div class="tag">
-                                <span>#Space</span>
+                        {#if showingComments}
+                                <h1>Comments</h1>
+                                <div class="input-container">
+                                    <textarea cols="30" rows="10" maxlength="240" placeholder="Share your thoughts"></textarea>
+                                    <button class="btn comment-btn">Comment</button>
+                                </div>
+                                <div class="comments">
+                                  <Comment />
+                                  <Comment />
+                                  <Comment />
+                                  <Comment />
+                                  <Comment />
+                                </div>
+                        {:else}
+                            <h1 class='header'>{postInfo.title}</h1>
+                            <img src={postInfo.image_url} alt="">
+                            <div class="tags">
+                                <div class="tag">
+                                    <span>#Space</span>
+                                </div>
+                                <div class="tag">
+                                    <span>#NASA</span>
+                                </div>
                             </div>
-                            <div class="tag">
-                                <span>#NASA</span>
-                            </div>
-                        </div>
-                        <p>{postInfo.summary}</p>
+                            <p>{postInfo.summary}</p>
+                        {/if}
                 </div>
                     <div class="user-actions">
                         <div class="nav">
@@ -80,12 +105,12 @@
                                 </a>
 
                             </div>
-                            <div class="user-container comments">
-                                <h1>Comments</h1>
-                                <div class="input-container">
-                                    <textarea cols="30" rows="10" maxlength="240" placeholder="Share your thoughts"></textarea>
-                                </div>
-                            </div>
+                            <button 
+                            class="btn"
+                            on:click={() => showingComments = !showingComments}
+                            >
+                            {showingComments ? "Show Article" : "View Comments"}
+                            </button>
                 </div>
             </div>
     </div>
@@ -224,7 +249,7 @@
     background-color: #2e313a;
   }
 
-  .nav button {
+  .nav button, .btn {
     color: white;
     background-color: inherit;
     font-size: 18px;
@@ -234,7 +259,7 @@
     border: 2px solid white;
   }
 
-  .nav button:hover {
+  .nav button:hover, .btn:hover {
     transition: 300ms ease;
     background-color: #23262e;
   }
@@ -306,24 +331,34 @@
     margin-right: 2rem;
   }
 
-  .comments {
+  .input-container {
+    display: flex;
     flex-direction: column;
     gap: 1rem;
-    height: auto;
   }
 
-  .comments h1 {
-    margin: 0;
-  }
-  
   .input-container textarea {
-    background-color: inherit;
+    background-color: #2e313a;
     font-size: 18px;
-    border: 1px solid wheat;
+    border: 1px solid grey;
     color: white;
     padding: 0.5rem;
     width: 95%;
     height: 4rem;
     resize: none;
+    border-radius: 18px;
+  }
+
+  .input-container textarea:focus {
+    outline: none;
+  }
+
+  .input-container textarea:hover {
+    transition: 300ms ease;
+    border: 1px solid wheat;
+  }
+
+  .comment-btn {
+    width: 98%;
   }
 </style>

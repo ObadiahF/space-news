@@ -8,23 +8,36 @@
     let nextUrl = 'https://api.spaceflightnewsapi.net/v4/articles/';
     let showModal = false;
     let postInfo = {};
+    let isComments = false;
 
     onMount(() => {
+        const skeletons = Array.from({ length: 12 }, () => ({}));
+        articles = [...skeletons];
         getNewsArticles();
     });
 
     const getNewsArticles = async () => {
+        const news = await fetchNews()
+        //Check if this is the first time this is ran
+        if (articles.length === 12) {
+            const skeletons = Array.from({ length: 2 }, () => ({}));
+            articles = [...news, ...skeletons];
+        } else {
+            //Rounds down to the nearest 10, getting rid of old skeletons
+            articles.length = Math.floor(articles.length / 10) * 10;
+            
+            const numOfSkeletons = howManySkeletonsNeeded(articles.length + news.length);
+            const skeletons = Array.from({ length: numOfSkeletons }, () => ({}));
+            articles = [...articles ,...news, ...skeletons];
+        }
+    }
+
+    const fetchNews = async () => {
         const res = await fetch(nextUrl);
 
         const data = await res.json();
-        const news = data.results;
         nextUrl = data.next;
-        //Rounds down to the nearest 10, getting rid of old skeletons
-        articles.length = Math.floor(articles.length / 10) * 10;
-
-        const numOfSkeletons = howManySkeletonsNeeded(articles.length + news.length);
-        const skeletons = Array.from({ length: numOfSkeletons }, () => ({}));
-        articles = [...articles ,...news, ...skeletons];
+        return data.results;
     }
 
     const howManySkeletonsNeeded = (currentNumOfArticles) => {
@@ -54,15 +67,21 @@
                 image_url={article.image_url}
                 articleId={article.id},
                 summary={article.summary}
-                on:comment={showModalData}
-                on:share={showModalData}
+                on:comment={(e) => {
+                    isComments = true;
+                    showModalData(e);
+                }}
+                on:share={(e) => {
+                    isComments = false;;
+                    showModalData(e);
+                }}
                 />
         {/if}
         {/each}
     </section>
 
     <button on:click={getNewsArticles}>Grab new Articles</button>
-    <Modal bind:showModal postInfo={postInfo}/>
+    <Modal bind:showModal postInfo={postInfo} isComments={isComments}/>
 </body>
 
 <style>
@@ -78,10 +97,6 @@
         flex-wrap: wrap;
         justify-content: center;
         gap: 2rem;
-    }
-
-    .scroll-lock {
-        overflow-y: hidden;
     }
 
         @media screen and (max-width: 868px) {

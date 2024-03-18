@@ -3,7 +3,6 @@
     import '@fortawesome/fontawesome-free/css/all.min.css';
 
     let karma = 0;
-    let numOfComments = 4;
     let vote = 0;
     let isSaved = false;
 
@@ -65,37 +64,20 @@
     </div>
     <div class="icon-group icon-hover" role="button" on:click={() => btnClicked("comment")}>
         <div class="icon">
-            <i class="fa-regular fa-comment"></i>
-        </div>
-
-        <div class="icon">
-                <p>{numOfComments}</p>
-        </div>
-    </div>
-
-    
-    
-    <div class="icon-group icon-hover" role="button" on:click={() => btnClicked("share")}>
-        <div class="icon">
-            <i class="fa-solid fa-arrow-up-from-bracket"></i>
-        </div>
-    </div>
-
-    <div class="icon-group icon-hover" role="button" on:click={() => btnClicked("share")}>
-        <div class="icon">
             <i class="fa-solid fa-ellipsis-vertical"></i>
         </div>
     </div>
+
 </main>
 
 <style>
     main {
         display: flex;
-        gap: 0.5rem;
+        gap: 0.2rem;
     }
 
     .icon {
-        font-size: 32px;
+        font-size: 16px;
         color: wheat;
         padding: 0.5rem;
         display: flex;
@@ -108,7 +90,7 @@
         display: flex;
         background-color: #23262e;
         padding: 0.3rem;
-        border-radius: 30px;
+        border-radius: 4px;
     }
 
     .karma {
