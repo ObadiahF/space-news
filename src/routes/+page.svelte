@@ -9,27 +9,31 @@
     let showModal = false;
     let postInfo = {};
     let isComments = false;
+    let scrollIndicator;
+    let skeletonsNeeded = 2;
+    let firstTimeRendering = true;
 
     onMount(() => {
-        const skeletons = Array.from({ length: 12 }, () => ({}));
+        const skeletons = Array.from({ length: (10 + howManySkeletonsNeeded(10)) }, () => ({}));
         articles = [...skeletons];
         getNewsArticles();
     });
 
     const getNewsArticles = async () => {
+        let skeletons = [];
+        let numOfSkeletons = skeletonsNeeded
         const news = await fetchNews()
-        //Check if this is the first time this is ran
-        if (articles.length === 12) {
-            const skeletons = Array.from({ length: 2 }, () => ({}));
-            articles = [...news, ...skeletons];
+        if (firstTimeRendering) {
+            articles.length = 0;
+            firstTimeRendering = false;
         } else {
             //Rounds down to the nearest 10, getting rid of old skeletons
             articles.length = Math.floor(articles.length / 10) * 10;
-            
-            const numOfSkeletons = howManySkeletonsNeeded(articles.length + news.length);
-            const skeletons = Array.from({ length: numOfSkeletons }, () => ({}));
-            articles = [...articles ,...news, ...skeletons];
+            numOfSkeletons = howManySkeletonsNeeded(articles.length + news.length);
         }
+
+        skeletons = Array.from({ length: numOfSkeletons }, () => ({}));
+        articles = [...articles ,...news, ...skeletons];
     }
 
     const fetchNews = async () => {
@@ -41,11 +45,11 @@
     }
 
     const howManySkeletonsNeeded = (currentNumOfArticles) => {
-        const howFarAwayFromAMultipleOf3 = currentNumOfArticles % 3;
+        const howFarAwayFromAMultiple = currentNumOfArticles % 3;
 
-        if (howFarAwayFromAMultipleOf3 === 0) return 0;
+        if (howFarAwayFromAMultiple === 0) return 0;
 
-        return 3 - howFarAwayFromAMultipleOf3;
+        return 3 - howFarAwayFromAMultiple;
         
     };
 
@@ -53,6 +57,19 @@
         postInfo = e.detail;
         showModal = !showModal;
     }
+
+    onMount(() => {
+        if (!scrollIndicator) return;
+    const loadingObserver = new IntersectionObserver((entries) => {
+      const element = entries[0];
+
+      if (element.isIntersecting) {
+        getNewsArticles()
+      }
+    });
+
+    loadingObserver.observe(scrollIndicator);
+  });
 </script>
 
 <body>
@@ -78,9 +95,11 @@
                 />
         {/if}
         {/each}
+        <div bind:this={scrollIndicator}></div>
     </section>
-
+<!--
     <button on:click={getNewsArticles}>Grab new Articles</button>
+-->
     <Modal bind:showModal postInfo={postInfo} isComments={isComments}/>
 </body>
 
