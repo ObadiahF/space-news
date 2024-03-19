@@ -72,7 +72,7 @@
   });
 </script>
 
-<body>
+<main>
     <section class="articles-container">
         {#each articles as article}
         {#if !article.url}
@@ -100,11 +100,12 @@
 <!--
     <button on:click={getNewsArticles}>Grab new Articles</button>
 -->
+
     <Modal bind:showModal postInfo={postInfo} isComments={isComments}/>
-</body>
+</main>
 
 <style>
-    body {
+    main {
         background-color: #0E1217;
         margin: 0;
         padding: 2rem;
@@ -119,7 +120,7 @@
     }
 
         @media screen and (max-width: 868px) {
-            body {
+            main {
                 padding: 1rem;
             }
         }

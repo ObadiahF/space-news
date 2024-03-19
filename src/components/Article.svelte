@@ -13,9 +13,16 @@
 <div class="article">
     <div class="header">
         <h3>#Scraped</h3>
-        <a href="{url}" target="_blank">
-            <button><i class="fa-regular fa-share-from-square"></i> Read</button>
-        </a>
+        <button
+        on:click={() => dispatch("share", {
+            id: articleId,
+            section: "Share",
+            url,
+            title,
+            image_url,
+            summary
+        })}
+        ><i class="fa-solid fa-angle-down"></i> Read</button>
     </div>
     <h2>{title}</h2>
     <div class="img-container">

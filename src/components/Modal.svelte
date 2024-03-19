@@ -56,7 +56,9 @@
                                 </div>
                         {:else}
                             <h1 class='header'>{postInfo.title}</h1>
-                            <img src={postInfo.image_url} alt="">
+                            <a href={postInfo.url}>
+                              <img src={postInfo.image_url} alt="">
+                            </a>
                             <div class="tags">
                                 <div class="tag">
                                     <span>#Space</span>
