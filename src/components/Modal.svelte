@@ -163,6 +163,7 @@
     border: 1px solid wheat;
     border-radius: 16px;
     color: white;
+    
   }
 
   .close-button {

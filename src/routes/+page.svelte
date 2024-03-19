@@ -13,6 +13,7 @@
     let skeletonsNeeded = 2;
     let firstTimeRendering = true;
 
+
     onMount(() => {
         const skeletons = Array.from({ length: (10 + howManySkeletonsNeeded(10)) }, () => ({}));
         articles = [...skeletons];
@@ -58,6 +59,18 @@
         showModal = !showModal;
     }
 
+    $: {
+        if (showModal) {
+           if (typeof window != 'undefined' && window.document) {
+                document.body.style.overflow = 'hidden';
+            }
+        } else {
+            if (typeof window != 'undefined' && window.document) {
+                document.body.style.overflow = 'auto';
+            }
+        }
+    }
+
     onMount(() => {
         if (!scrollIndicator) return;
     const loadingObserver = new IntersectionObserver((entries) => {
@@ -72,9 +85,9 @@
   });
 </script>
 
-<main>
+<main class={showModal && "modal-open"}>
     <section class="articles-container">
-        {#each articles as article}
+        {#each articles as article, i}
         {#if !article.url}
                 <Skeleton />
             {:else}
@@ -83,7 +96,8 @@
                 title={article.title} 
                 image_url={article.image_url}
                 articleId={article.id},
-                summary={article.summary}
+                summary={article.summary},
+                index={i}
                 on:comment={(e) => {
                     isComments = true;
                     showModalData(e);
@@ -95,7 +109,7 @@
                 />
         {/if}
         {/each}
-        <div bind:this={scrollIndicator}></div>
+        <div bind:this={scrollIndicator} style="width: 0px;"></div>
     </section>
 <!--
     <button on:click={getNewsArticles}>Grab new Articles</button>
@@ -110,6 +124,11 @@
         margin: 0;
         padding: 2rem;
         box-sizing: border-box;
+    }
+
+    .modal-open {
+        overflow-y: hidden;
+        
     }
 
     .articles-container {

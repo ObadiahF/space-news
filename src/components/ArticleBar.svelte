@@ -1,11 +1,14 @@
 <script>
     import { createEventDispatcher } from 'svelte'
     import '@fortawesome/fontawesome-free/css/all.min.css';
-
+    import Tooltip from './Tooltip.svelte'
+    import OptionsModal from './Options-Modal.svelte';
+    export let index;
     let karma = 0;
     let numOfComments = 4;
     let vote = 0;
     let isSaved = false;
+    let showModal = false;
 
     const btnClicked = createEventDispatcher();
 
@@ -42,6 +45,7 @@
 </script>
 
 <main>
+    <OptionsModal showDropDown={showModal} on:closeDropDown={() => showModal = false} index={index}/>
     <div class="icon-group">
         <div class="icon">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -60,32 +64,36 @@
             <i class="fa-solid fa-arrow-down vote {vote === -1 && "reacted"}"
                 type="button"
                 on:click={() => upvoteOrDownvote(-1)}
-            ></i>    
+                ></i>    
         </div>
     </div>
-    <div class="icon-group icon-hover" role="button" on:click={() => btnClicked("comment")}>
-        <div class="icon">
-            <i class="fa-regular fa-comment"></i>
-        </div>
-
-        <div class="icon">
+    <Tooltip text={"Comments"}>
+        <div class="icon-group icon-hover" role="button" on:click={() => btnClicked("comment")}>
+            <div class="icon">
+                <i class="fa-regular fa-comment"></i>
+            </div>
+            
+            <div class="icon">
                 <p>{numOfComments}</p>
+            </div>
         </div>
-    </div>
-
+    </Tooltip>
     
     
-    <div class="icon-group icon-hover" role="button" on:click={() => btnClicked("share")}>
-        <div class="icon">
-            <i class="fa-solid fa-arrow-up-from-bracket"></i>
-        </div>
+    <Tooltip text={"Share"}>
+        <div class="icon-group icon-hover" role="button" on:click={() => btnClicked("share")}>
+            <div class="icon">
+                <i class="fa-solid fa-arrow-up-from-bracket"></i>
+            </div>
     </div>
-
-    <div class="icon-group icon-hover" role="button" on:click={() => btnClicked("share")}>
+    </Tooltip>
+    <Tooltip text={"Options"}>
+    <div class="icon-group icon-hover options-btn" role="button" on:click={() => showModal = !showModal}>
         <div class="icon">
             <i class="fa-solid fa-ellipsis-vertical"></i>
         </div>
     </div>
+    </Tooltip>
 </main>
 
 <style>

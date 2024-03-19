@@ -6,6 +6,7 @@
     export let image_url;
     export let articleId;
     export let summary;
+    export let index;
 
     const dispatch = createEventDispatcher();
 </script>
@@ -31,6 +32,7 @@
         </a>
     </div>
     <ArticleBar 
+    index={index}
     on:comment={() => dispatch("comment", 
     {
         id: articleId,
