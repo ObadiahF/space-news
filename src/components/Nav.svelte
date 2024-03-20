@@ -1,12 +1,12 @@
 <script>
-
+    import Media from '../utils/MediaQuery.svelte'
 </script>
 
 <nav>
     <div class="logo">
         <h1>Space News 🚀</h1>
     </div>
-
+        
         <div class="links">
             <button><i class="fa-solid fa-plus"></i> New Post</button>
             <button><i class="fa-regular fa-bell"></i></button>
@@ -48,5 +48,9 @@
     button:hover {
         transition: 300ms ease;
         background-color: #23262e;
+    }
+
+    @media screen and (max-width: 690px) {
+
     }
 </style>

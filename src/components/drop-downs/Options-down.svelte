@@ -1,11 +1,11 @@
 <script>
     import { onMount ,onDestroy, createEventDispatcher } from "svelte";
-    import { downvote, report } from './handleButtonClick'
 
     export let showDropDown = false;
     export let dialog;
     export let postInfo;
     import { fly } from "svelte/transition";
+    import ListItems from "./ListItems.svelte";
     const dispatch = createEventDispatcher();
 
     const handleClickOutside = (event) => {
@@ -31,8 +31,7 @@
   {#if showDropDown}
      <div class="dropdown-content option-drop-down" 
      transition:fly={{ delay: 10, duration: 100, y: 30, opacity: 0.5}}>
-       <li role="button" on:click={() => downvote(postInfo)}><i class="fa-solid fa-arrow-down"></i> Downvote</li>
-       <li role="button" on:click={() => report(postInfo)}><i class="fa-regular fa-flag"></i> Report</li>
+       <ListItems />
      </div>
   {/if}
 </div>
@@ -60,22 +59,4 @@
   border: 1px solid wheat;
   color: white;
 }
-
-/* Style the links inside the dropdown */
-.dropdown-content li {
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  cursor: pointer;
-}
-
-/* Change color of dropdown links on hover */
-.dropdown-content li:hover {
-  transition: 300ms ease;
-  background-color: #2c2f38;
-
-}
-
-
-
 </style>

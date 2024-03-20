@@ -25,6 +25,7 @@
 
   $: {
     if (!showModal) {
+      showingComments = false;
       showModal1 = false;
     }
   }

@@ -5,3 +5,7 @@ export const downvote = (postInfo) => {
 export const report = (postInfo) => {
     console.log(postInfo)
 }
+
+export const save = (postInfo) => {
+    
+}

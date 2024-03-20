@@ -33,7 +33,7 @@
     postInfo={postInfo}
     on:comment={() => dispatch("comment", 
     {
-        id: articleId,
+        id,
         section: "Comment",
         url,
         title,
@@ -42,7 +42,7 @@
     })} 
     on:share={() => dispatch("share", 
     {
-        id: articleId,
+        id,
         section: "Share",
         url,
         title,
