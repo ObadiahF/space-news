@@ -1,11 +1,8 @@
 <script>
     import { createEventDispatcher } from 'svelte';
     import ArticleBar from './ArticleBar.svelte'
-    export let url;
-    export let title;
-    export let image_url;
-    export let articleId;
-    export let summary;
+    export let postInfo;
+    let { url, title, image_url, id, summary } = postInfo
     export let index;
 
     const dispatch = createEventDispatcher();
@@ -16,7 +13,7 @@
         <h3>#Scraped</h3>
         <button
         on:click={() => dispatch("share", {
-            id: articleId,
+            id,
             section: "Share",
             url,
             title,
@@ -33,6 +30,7 @@
     </div>
     <ArticleBar 
     index={index}
+    postInfo={postInfo}
     on:comment={() => dispatch("comment", 
     {
         id: articleId,

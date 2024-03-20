@@ -2,8 +2,9 @@
     import { createEventDispatcher } from 'svelte'
     import '@fortawesome/fontawesome-free/css/all.min.css';
     import Tooltip from './Tooltip.svelte'
-    import OptionsModal from './Options-Modal.svelte';
+    import OptionsUp from './drop-downs/Options-Up.svelte';
     export let index;
+    export let postInfo;
     let karma = 0;
     let numOfComments = 4;
     let vote = 0;
@@ -45,7 +46,7 @@
 </script>
 
 <main>
-    <OptionsModal showDropDown={showModal} on:closeDropDown={() => showModal = false} index={index}/>
+    <OptionsUp showDropDown={showModal} on:closeDropDown={() => showModal = false} index={index} postInfo={postInfo}/>
     <div class="icon-group">
         <div class="icon">
             <!-- svelte-ignore a11y-click-events-have-key-events -->

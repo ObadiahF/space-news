@@ -92,11 +92,7 @@
                 <Skeleton />
             {:else}
                 <Article 
-                url={article.url} 
-                title={article.title} 
-                image_url={article.image_url}
-                articleId={article.id},
-                summary={article.summary},
+                postInfo={article}
                 index={i}
                 on:comment={(e) => {
                     isComments = true;

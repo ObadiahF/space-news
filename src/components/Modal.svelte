@@ -1,12 +1,16 @@
 <script>
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
     import Comment from "./Comment.svelte";
+    import MediaQuery from '../utils/MediaQuery.svelte'
+    import OptionsUp from "./drop-downs/Options-Up.svelte";
+    import OptionsDown from "./drop-downs/Options-down.svelte";
 	export let showModal; // boolean
     export let postInfo; // object
     export let isComments; //bool
+
 	let dialog; // HTMLDialogElement
-	let section = "";
   let showingComments = false;
+  let showModal1 = false;
 
   $: {
     if (isComments) {
@@ -15,8 +19,15 @@
       showingComments = false;
     }
   }
+
   
 	$: if (dialog && showModal) dialog.showModal();
+
+  $: {
+    if (!showModal) {
+      showModal1 = false;
+    }
+  }
 
     const copy = async () => {
         try {
@@ -37,7 +48,7 @@
 		}}
 >
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div class="modal" on:click|stopPropagation>
+	<div class="modal">
         <div class="modal-content">
             <div class="content">
                 <div class="article-info">
@@ -55,10 +66,31 @@
                                   <Comment />
                                 </div>
                         {:else}
+                        <MediaQuery query="(max-width: 862px)" let:matches>
+                          {#if matches}
+                        <div class="nav mobile">
+                            <a href={postInfo.url} target="_blank"><button><i class="fa-regular fa-share-from-square"></i> Read Post</button></a>
+                            <div class="icons">
+                                <div class="child jarvis" on:click={() => showModal1 = !showModal1}>
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </div>
+                                <OptionsDown showDropDown={showModal1} on:closeDropDown={() => showModal1 = false} dialog={dialog} postInfo={postInfo}/>
+                                <div class="child">
+                                    <span class="close-button" autofocus on:click={() => dialog.close()}>&times;</span></div>
+                                </div>
+                            </div>
+                            {/if}
+                        </MediaQuery>
                             <h1 class='header'>{postInfo.title}</h1>
-                            <a href={postInfo.url}>
+                            <MediaQuery query="(max-width: 862px)" let:matches>
+                            {#if matches}
                               <img src={postInfo.image_url} alt="">
-                            </a>
+                            {:else}
+                              <a href={postInfo.url} target="_blank">
+                                <img src={postInfo.image_url} alt="">
+                              </a>
+                            {/if}
+                            </MediaQuery>
                             <div class="tags">
                                 <div class="tag">
                                     <span>#Space</span>
@@ -71,16 +103,21 @@
                         {/if}
                 </div>
                     <div class="user-actions">
+                        <MediaQuery query="(min-width: 863px)" let:matches>
+                          {#if matches}
                         <div class="nav">
                             <a href={postInfo.url} target="_blank"><button><i class="fa-regular fa-share-from-square"></i> Read Post</button></a>
                             <div class="icons">
-                                <div class="child">
+                                <div class="child jarvis" on:click={() => showModal1 = !showModal1}>
                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                 </div>
+                                <OptionsDown showDropDown={showModal1} on:closeDropDown={() => showModal1 = false} dialog={dialog} postInfo={postInfo}/>
                                 <div class="child">
                                     <span class="close-button" autofocus on:click={() => dialog.close()}>&times;</span></div>
                                 </div>
                             </div>
+                            {/if}
+                        </MediaQuery>
                             <a href="#">
                                 <div class="user-container">
                                     <div class="img-container">
@@ -114,6 +151,7 @@
                             {showingComments ? "Show Article" : "View Comments"}
                             </button>
                 </div>
+              </div>
             </div>
     </div>
 </dialog>
@@ -363,5 +401,35 @@
 
   .comment-btn {
     width: 98%;
+  }
+
+  .mobile {
+    justify-content: space-between;
+  }
+  @media screen and (max-width: 862px) {
+    .content {
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .article-info {
+      width: 100%;
+    }
+
+    .header {
+      text-wrap: pretty;
+    }
+
+    .user-actions {
+      width: 100%;
+      border: none;
+      border-top: 1px solid wheat;
+      padding: 1rem 0.5rem;
+    }
+
+    .modal-content img {
+          max-height: 39.5vw;
+        }
   }
 </style>
