@@ -150,4 +150,10 @@
         background-color: #2e313a;
         cursor: pointer;
     }
+
+    @media screen and (max-width: 415px) {
+        .icon {
+            font-size: 24px;
+        }
+    }
 </style>

@@ -128,4 +128,5 @@
                 max-height: 35vw;
             }
     }
+
 </style>
