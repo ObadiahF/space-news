@@ -10,7 +10,7 @@
         <div class="links">
             <button><i class="fa-solid fa-plus"></i> New Post</button>
             <button><i class="fa-regular fa-bell"></i></button>
-            <button>Log In <i class="fa-solid fa-right-to-bracket"></i></button>
+            <a href="login"><button>Log In <i class="fa-solid fa-right-to-bracket"></i></button></a>
         </div>
 </nav>
 

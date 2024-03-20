@@ -1,7 +1,9 @@
 <script>
-    import ToolTip from "../../components/Tooltip.svelte";
+    import '@fortawesome/fontawesome-free/css/all.min.css';
+    import ToolTip from '../../components/Tooltip.svelte'
     let emailInput;
     let passwordInput;
+    let confirmPasswordInput;
     let errorMsg = "";
     let successMsg = "";
 
@@ -11,16 +13,19 @@
 
     const email = emailInput.value.trim();
     const password = passwordInput.value.trim();
+    const comfirmPassword = confirmPasswordInput.value.trim();
 
     // Input validation
     if (!email) {
         errorMsg = 'Email is required';
     } else if (!isValidEmail(email)) {
         errorMsg = 'Please enter a valid email address';
-    } else if (!password) {
+    } else if (!password || comfirmPassword) {
         errorMsg = 'Password is required';
-    } else if (password.length < 6) {
+    } else if (password.length < 6 || comfirmPassword.length < 6) {
         errorMsg = 'Password must be at least 6 characters';
+    } else if (password !== comfirmPassword) {
+        errorMsg = 'Passwords must match';
     }
 
     if (errorMsg) return;
@@ -39,7 +44,7 @@
 <div class="login-container">
     <div class="login-form">
         <div class="title-container">
-            <h1>Login</h1>
+            <h1>Sign Up</h1>
             <ToolTip text={"Go Back"}>
             <a href="/"><i class="fa-solid fa-x"></i></a>
             </ToolTip>
@@ -67,9 +72,17 @@
                     bind:this={passwordInput}
                 >
             </div>
+            <div class="form-group">
+                <label for="password">Confirm Password</label>
+                <input type="password"
+                    placeholder="Confirm Password" 
+                    maxlength="150" 
+                    bind:this={confirmPasswordInput}
+                >
+            </div>
 
             <div class="form-group link">
-                <a href="/signup"><span>Don't have an account?</span></a>
+                <a href="/login"><span>Already have an account?</span></a>
             </div>
 
             <div class="form-group">
@@ -129,7 +142,7 @@
         font-size: 16px;
     }
 
-    button[type="submit"] {
+    button {
         width: 100%;
         padding: 10px;
         border: none;
@@ -145,7 +158,7 @@
         outline: none;
     }
 
-    button[type="submit"]:hover {
+    button:hover {
         transition: 300ms ease-in;
         background-color: rgb(159, 81, 233);
     }
@@ -186,6 +199,7 @@
         color: blueviolet;
         cursor: pointer;
     }
+
 
     @media screen and (max-width: 415px) {
         .login-form {

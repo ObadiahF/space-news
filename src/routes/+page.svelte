@@ -3,6 +3,7 @@
     import Article from '../components/Article.svelte';
     import Skeleton from '../components/Skeleton.svelte';
     import Modal from '../components/Modal.svelte';
+    import Nav from '../components/Nav.svelte'
 
     let articles = [];
     let nextUrl = 'https://api.spaceflightnewsapi.net/v4/articles/';
@@ -85,6 +86,7 @@
   });
 </script>
 
+<Nav />
 <main class={showModal && "modal-open"}>
     <section class="articles-container">
         {#each articles as article, i}
