@@ -86,7 +86,7 @@
   });
 </script>
 
-<Nav />
+<Nav onNewsPage={true}/>
 <main class={showModal && "modal-open"}>
     <section class="articles-container">
         {#each articles as article, i}

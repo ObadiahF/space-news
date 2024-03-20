@@ -1,9 +1,18 @@
 <script>
+    import { onMount } from 'svelte';
     import MediaQuery from '../utils/MediaQuery.svelte';
     import { fly, fade } from 'svelte/transition';
+    import ToolTip from './Tooltip.svelte'
+
+    export let onNewsPage = false;
 
     let showMobile = false;
     let transitionFinished = true;
+    let hasNotifications = true;
+
+    onMount(() => {
+        //check for notifications
+    })
 
     $: {
         if (showMobile) {
@@ -24,14 +33,19 @@
 </script>
 
 <nav>
-        <MediaQuery query="(min-width: 700px)" let:matches>
+        <MediaQuery query="(min-width: {onNewsPage ? 780 : 700}px)" let:matches>
             {#if matches}
             <div class="logo">
                 <h1>Space News 🚀</h1>
             </div>
             <div class="links">
+                {#if !onNewsPage}
+                <a href="/"><button>Feed</button></a>
+                {/if}
                 <button><i class="fa-solid fa-plus"></i> New Post</button>
-                <button><i class="fa-regular fa-bell"></i></button>
+                <ToolTip text={"Notifications"} isPointingDown={false}>
+                    <a href="notifications"><button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></button></a>
+                </ToolTip>
                 <a href="login"><button>Log In <i class="fa-solid fa-right-to-bracket"></i></button></a>
             </div>
             {:else}
@@ -41,8 +55,11 @@
                         <div class="logo">
                             <h1>Space News 🚀</h1>
                         </div>
+                        {#if !onNewsPage}
+                        <a href="/"><button>Feed</button></a>
+                        {/if}
                         <button><i class="fa-solid fa-plus"></i> New Post</button>
-                        <button><i class="fa-regular fa-bell"></i></button>
+                        <a href="notifications"><button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></button></a>
                         <a href="login"><button>Log In <i class="fa-solid fa-right-to-bracket"></i></button></a>
                     </div>
                 {:else}
@@ -104,7 +121,7 @@
         position: relative;
         flex-direction: column;
         background-color: inherit;
-        gap: 4rem;
+        gap: 3rem;
         width: 84.5%;
         height: 100vh;
         z-index: 99;
@@ -118,5 +135,18 @@
         top: 15px;
         right: 0;
     }
+
+    .fa-bell {
+        position: relative;
+    }
     
+    #notification {
+        position: absolute;
+        top: -2px;
+        left: 9px;
+        height: 10px;
+        aspect-ratio: 1;
+        background-color: red;
+        border-radius: 50%;
+    }
 </style>
