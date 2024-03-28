@@ -4,13 +4,15 @@
     export let postInfo;
     let { url, title, image_url, id, summary } = postInfo
     export let index;
+    export let preview = false;
+    export let isUserMade = false;
 
     const dispatch = createEventDispatcher();
 </script>
 
 <div class="article">
     <div class="header">
-        <h3>#Scraped</h3>
+        <h3>#{isUserMade ? "UserMade": "Scraped"}</h3>
         <button
         on:click={() => dispatch("share", {
             id,
@@ -31,6 +33,7 @@
     <ArticleBar 
     index={index}
     postInfo={postInfo}
+    isPreview={preview}
     on:comment={() => dispatch("comment", 
     {
         id,

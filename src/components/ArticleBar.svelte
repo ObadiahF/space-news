@@ -5,13 +5,20 @@
     import OptionsUp from './drop-downs/Options-Up.svelte';
     export let index;
     export let postInfo;
+    export let isPreview = false;
     let karma = 0;
     let numOfComments = 4;
     let vote = 0;
     let isSaved = false;
     let showModal = false;
 
+
     const btnClicked = createEventDispatcher();
+
+    const showModalData = () => {
+        if (isPreview) return;
+        showModal = !showModal;
+    }
 
     const upvoteOrDownvote = (val) => {
         if (!vote) {
@@ -46,7 +53,12 @@
 </script>
 
 <main>
-    <OptionsUp showDropDown={showModal} on:closeDropDown={() => showModal = false} index={index} postInfo={postInfo}/>
+    <OptionsUp 
+        showDropDown={showModal}
+        on:closeDropDown={() => showModal = false}
+        index={index} 
+        postInfo={postInfo}
+    />
     <div class="icon-group">
         <div class="icon">
             <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -89,7 +101,7 @@
     </div>
     </Tooltip>
     <Tooltip text={"Options"}>
-    <div class="icon-group icon-hover options-btn" role="button" on:click={() => showModal = !showModal}>
+    <div class="icon-group icon-hover options-btn" role="button" on:click={showModalData}>
         <div class="icon">
             <i class="fa-solid fa-ellipsis-vertical"></i>
         </div>

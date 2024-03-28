@@ -7,6 +7,8 @@
 	export let showModal; // boolean
     export let postInfo; // object
     export let isComments; //bool
+    export let userCreated = false;
+    export let isPreview = false;
 
 	let dialog; // HTMLDialogElement
   let showingComments = false;
@@ -30,6 +32,14 @@
     }
   }
 
+  $: {
+    if (showingComments) {
+      if (isPreview) {
+        showingComments = false;
+      }
+    }
+  }
+
     const copy = async () => {
         try {
             await navigator.clipboard.writeText(postInfo.url);
@@ -38,6 +48,10 @@
         }
     }
 
+    const toggleModal1 = () => {
+      if (isPreview) return;
+      showModal1 = !showModal1
+    }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
@@ -70,9 +84,13 @@
                         <MediaQuery query="(max-width: 862px)" let:matches>
                           {#if matches}
                         <div class="nav mobile">
-                            <a href={postInfo.url} target="_blank"><button><i class="fa-regular fa-share-from-square"></i> Read Post</button></a>
+                          {#if isPreview}
+                            <button style="opacity: 0; cursor:default;"><i class="fa-regular fa-share-from-square"></i> Read Post</button>
+                          {:else}
+                              <a href={postInfo.url} target="_blank"><button><i class="fa-regular fa-share-from-square"></i> Read Post</button></a>
+                          {/if}
                             <div class="icons">
-                                <div class="child jarvis" on:click={() => showModal1 = !showModal1}>
+                                <div class="child jarvis" on:click={toggleModal1}>
                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                 </div>
                                 <OptionsDown showDropDown={showModal1} on:closeDropDown={() => showModal1 = false} dialog={dialog} postInfo={postInfo}/>
@@ -107,9 +125,13 @@
                         <MediaQuery query="(min-width: 863px)" let:matches>
                           {#if matches}
                         <div class="nav">
-                            <a href={postInfo.url} target="_blank"><button><i class="fa-regular fa-share-from-square"></i> Read Post</button></a>
+                          {#if isPreview}
+                            <button style="opacity: 0; cursor:default;"><i class="fa-regular fa-share-from-square"></i> Read Post</button>
+                          {:else}
+                              <a href={postInfo.url} target="_blank"><button><i class="fa-regular fa-share-from-square"></i> Read Post</button></a>
+                          {/if}
                             <div class="icons">
-                                <div class="child jarvis" on:click={() => showModal1 = !showModal1}>
+                                <div class="child jarvis" on:click={toggleModal1}>
                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                 </div>
                                 <OptionsDown showDropDown={showModal1} on:closeDropDown={() => showModal1 = false} dialog={dialog} postInfo={postInfo}/>

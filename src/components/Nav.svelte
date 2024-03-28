@@ -3,6 +3,8 @@
     import MediaQuery from '../utils/MediaQuery.svelte';
     import { fly, fade } from 'svelte/transition';
     import ToolTip from './Tooltip.svelte'
+    import '@fortawesome/fontawesome-free/css/all.min.css';
+    import Button from './Button.svelte';
 
     export let onNewsPage = false;
 
@@ -40,13 +42,13 @@
             </div>
             <div class="links">
                 {#if !onNewsPage}
-                <a href="/"><button>Feed</button></a>
+                <a href="/"><Button>Feed</Button></a>
                 {/if}
-                <button><i class="fa-solid fa-plus"></i> New Post</button>
+                <a href="new-post"><Button><i class="fa-solid fa-plus"></i> New Post</Button></a>
                 <ToolTip text={"Notifications"} isPointingDown={false}>
-                    <a href="notifications"><button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></button></a>
+                    <a href="notifications"><Button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></Button></a>
                 </ToolTip>
-                <a href="login"><button>Log In <i class="fa-solid fa-right-to-bracket"></i></button></a>
+                <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
             </div>
             {:else}
                 {#if showMobile}
@@ -56,11 +58,11 @@
                             <h1>Space News 🚀</h1>
                         </div>
                         {#if !onNewsPage}
-                        <a href="/"><button>Feed</button></a>
+                        <a href="/"><Button>Feed</Button></a>
                         {/if}
-                        <button><i class="fa-solid fa-plus"></i> New Post</button>
+                        <a href="new-post"><Button><i class="fa-solid fa-plus"></i> New Post</Button></a>
                         <a href="notifications"><button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></button></a>
-                        <a href="login"><button>Log In <i class="fa-solid fa-right-to-bracket"></i></button></a>
+                        <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
                     </div>
                 {:else}
                     {#if transitionFinished}
@@ -94,22 +96,6 @@
         display: flex;
         gap: 1rem;
     }
-
-    button {
-        color: white;
-        background-color: inherit;
-        font-size: 18px;
-        padding: 0.5rem 1.5rem;
-        cursor: pointer;
-        border-radius: 8px;
-        border: 2px solid gray;
-    }
-
-    button:hover {
-        transition: 300ms ease;
-        background-color: #23262e;
-    }
-
     .fa-bars {
         color: white;
         font-size: 32px;
