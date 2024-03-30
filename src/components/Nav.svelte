@@ -35,7 +35,7 @@
 </script>
 
 <nav>
-        <MediaQuery query="(min-width: {onNewsPage ? 780 : 700}px)" let:matches>
+        <MediaQuery query="(min-width: {onNewsPage ? 780 : 850}px)" let:matches>
             {#if matches}
             <div class="logo">
                 <h1>Space News 🚀</h1>
@@ -61,7 +61,7 @@
                         <a href="/"><Button>Feed</Button></a>
                         {/if}
                         <a href="new-post"><Button><i class="fa-solid fa-plus"></i> New Post</Button></a>
-                        <a href="notifications"><button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></button></a>
+                        <a href="notifications"><Button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></Button></a>
                         <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
                     </div>
                 {:else}
@@ -90,6 +90,7 @@
         font-size: 32px;
         font-weight: bold;
         margin: 0;
+        text-align: center;
     }
 
     .links {

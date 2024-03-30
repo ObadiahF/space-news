@@ -76,6 +76,7 @@
     .img-container img {
         width: auto;
         max-height: 150px;
+        max-width: 100%;
     }
 
     .img-container {

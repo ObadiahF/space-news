@@ -2,6 +2,7 @@
 import Nav from '../../components/Nav.svelte'
 import Article from '../../components/Article.svelte'
 import Modal from '../../components/Modal.svelte';
+    import ShareLinkPage from './ShareLinkPage.svelte';
 
 let thumbnailInput;
 let titleInput;
@@ -15,7 +16,7 @@ let tagInputValue;
 let errorMsg = "";
 let postInfo = {url: "", title: "", image_url: "", id: "", summary: ""}
 let tags = [];
-let errorMsgEl;
+let submittedLink = false;
 
 $: {
     if (active) {
@@ -124,7 +125,7 @@ const preview = () => {
         >Share a Link</li>
     </nav>
     {#if errorMsg}
-            <p id="error" bind:this={errorMsgEl}>{errorMsg}</p>
+            <p id="error">{errorMsg}</p>
     {/if}
         {#if active === "post"}
         <div class="post-container">
@@ -153,7 +154,10 @@ const preview = () => {
                     <textarea id="write" placeholder="Post Body Text*" bind:value={bodyText}></textarea>
                     <div class="tags-container">
                         <input type="text" maxlength="30" placeholder="Tags" bind:value={tagInputValue}>
-                        <button on:click={addTag}>Add Tag</button>
+                        <div style="display: flex; gap: 1rem;">
+                            <button on:click={addTag}>Add Tag</button>
+                            <button>Clear Tags</button>
+                        </div>
                         <div class="tags">
                             {#each tags as tag}
                             <div class="tag">#{tag}</div>
@@ -182,7 +186,7 @@ const preview = () => {
             </div>
         </div>
         {:else}
-
+            <ShareLinkPage />
         {/if}
     </div>
 </main>
@@ -253,9 +257,9 @@ const preview = () => {
 
     #write {
         width: 100%;
+        max-width: 40rem;
         background-color: #23262e;
         outline: none;
-        max-width: 56vw;
         color: whitesmoke;
         padding: 0.5rem;
         height: 10rem;
@@ -273,6 +277,7 @@ const preview = () => {
         color: whitesmoke;
         border: 1px solid grey;
         border-radius: 8px;
+        width: 100%;
     }
 
     .title {
@@ -331,6 +336,7 @@ const preview = () => {
         gap: 1rem;
         margin-top: 1rem;
         margin-bottom: 2rem;
+        width: 100%;
     }
 
     .tags {
@@ -373,6 +379,22 @@ const preview = () => {
 
     #error {
         color: rgb(248, 62, 62);
+    }
+
+    .link-container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .link-section {
+        font-weight: bold;
+        font-size: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
     }
 
     @media screen and (max-width: 775px) {
