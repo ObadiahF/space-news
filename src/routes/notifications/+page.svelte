@@ -98,4 +98,30 @@ h1 {
     background-color: #1C1F26;
     padding: 1.5rem 1rem;
 }
+
+@media screen and (max-width: 755px) {
+    section {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 470px) {
+    section {
+        width: 100%;
+        border: none;
+    }
+
+    main {
+        padding: 0.5rem;
+    }
+
+   .title-container {
+    flex-direction: column;
+   }
+
+   button {
+    font-size: 42px;
+    margin-bottom: 2rem;
+   }
+}
 </style>
