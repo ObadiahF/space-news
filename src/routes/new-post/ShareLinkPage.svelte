@@ -18,8 +18,6 @@
         tagInputValue = "";
     }
 
-    $: {console.log(inWritingMode); };
-
     const deleteTag = (index) => {
         tags.splice(index, 1);
         tags = tags;
@@ -49,7 +47,31 @@ const preview = () => {
     inWritingMode = false
 }
 
+const scroll = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+            });
+}
+
+$: {
+        if (showModal) {
+           if (typeof window != 'undefined' && window.document) {
+                document.body.style.overflow = 'hidden';
+            }
+        } else {
+            if (typeof window != 'undefined' && window.document) {
+                document.body.style.overflow = 'auto';
+            }
+        }
+    }
+
 </script>
+
+{#if errorMsg}
+            <p id="error" style="margin-bottom: -4rem;">{errorMsg}</p>
+{/if}
+
 <div class="link-section" style="margin-bottom: -2rem;">
     <label for="">Link</label>
 </div>
@@ -83,7 +105,7 @@ const preview = () => {
                 <h1>Post Details</h1>
                 <div class="link-section">
                     <label for="">Title</label>
-                    <input type="text" maxlength="100">
+                    <input type="text" maxlength="100" bind:this={titleInput}>
                 </div>
                 <div class="link-section">
                     <label for="">Summary</label>
@@ -105,6 +127,10 @@ const preview = () => {
                             <div class="tag" on:click={() => deleteTag(index)}>#{tag}</div>
                             {/each}
                         </div>
+                    </div>
+                    <div class="btn-container">
+                        <button>Save Draft</button>
+                        <button>Post</button>
                     </div>
                     {:else}
                         <div class="preview">
@@ -246,6 +272,12 @@ const preview = () => {
         width: 100%;
     }
 
+    .btn-container {
+        width: 100%;
+        display: flex;
+        gap: 1rem;
+    }
+
     @media screen and (max-width: 775px) {
         button {
             width: 100%;
@@ -261,6 +293,13 @@ const preview = () => {
 
         .tags {
             width: 95%;
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+        .btn-container {
+            flex-direction: column;
+            margin-top: -2rem;
         }
     }
 </style>

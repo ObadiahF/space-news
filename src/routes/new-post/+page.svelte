@@ -16,7 +16,6 @@ let tagInputValue;
 let errorMsg = "";
 let postInfo = {url: "", title: "", image_url: "", id: "", summary: ""}
 let tags = [];
-let submittedLink = false;
 
 $: {
     if (active) {
@@ -87,6 +86,11 @@ const preview = () => {
         tagInputValue = "";
     }
 
+    const deleteTag = (index) => {
+        tags.splice(index, 1);
+        tags = tags;
+    };
+
     const scroll = () => {
         window.scrollTo({
             top: 0,
@@ -125,14 +129,17 @@ const preview = () => {
         >Share a Link</li>
     </nav>
     {#if errorMsg}
-            <p id="error">{errorMsg}</p>
+            <p id="error" style="margin-bottom: -2rem;">{errorMsg}</p>
     {/if}
         {#if active === "post"}
-        <div class="post-container">
-            <button class="img-btn" on:click={() => thumbnailInput.click()}>{postInfo.image_url ? "Thumbnail selected":"Thumbnail *"}</button>
+            <div style="width: 100%;"> 
+                <button class="img-btn" on:click={() => thumbnailInput.click()}>{postInfo.image_url ? "Thumbnail selected":"Thumbnail *"}</button>
+            </div>
             <input type="file" on:change={fileSelected} style="display: none;" accept="image/*" bind:this={thumbnailInput} max="1">
-            <input type="text" placeholder="Post Title *" bind:this={titleInput}>
-            <div class="write-container">
+                <div class="link-section">
+                    <label for="">Title</label>
+                    <input type="text" maxlength="100" bind:this={titleInput}>
+                </div>
                 <nav>
                     <li 
                     class={inWritingMode === true && "active"}
@@ -149,23 +156,32 @@ const preview = () => {
                     </li>
                 </nav>
 
-                <div class="write">
                 {#if inWritingMode}
-                    <textarea id="write" placeholder="Post Body Text*" bind:value={bodyText}></textarea>
-                    <div class="tags-container">
-                        <input type="text" maxlength="30" placeholder="Tags" bind:value={tagInputValue}>
-                        <div style="display: flex; gap: 1rem;">
-                            <button on:click={addTag}>Add Tag</button>
-                            <button>Clear Tags</button>
+                <div class="link-section">
+                    <label for="">Summary</label>
+                    <textarea id="write" bind:value={bodyText}></textarea>
+                </div>
+                <div class="tags-container">
+                    <div class="link-section">
+                        <label for="">Tags</label>
+                    </div>
+                    <form action="">
+                        <input type="text" maxlength="30" bind:value={tagInputValue}>
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <button on:click|preventDefault={addTag} type="submit">Add Tag</button>
+                            <button on:click|preventDefault={() => tags = []}>Clear Tags</button>
                         </div>
+                    </form>
                         <div class="tags">
-                            {#each tags as tag}
-                            <div class="tag">#{tag}</div>
+                            {#each tags as tag, index}
+                            <div class="tag" on:click={() => deleteTag(index)}>#{tag}</div>
                             {/each}
                         </div>
+                </div>
+                    <div class="btn-container">
+                        <button>Save Draft</button>
+                        <button>Post</button>
                     </div>
-                    <button>Save Draft</button>
-                    <button>Post</button>
                 {:else}
                 <div class="preview">
                     <Article 
@@ -182,9 +198,6 @@ const preview = () => {
                     />
                 </div>
                 {/if}
-                </div>
-            </div>
-        </div>
         {:else}
             <ShareLinkPage />
         {/if}
@@ -193,7 +206,7 @@ const preview = () => {
 <Modal bind:showModal postInfo={postInfo} isComments={false} isPreview={true} userCreated={true}/>
 
 <style>
-    main {
+main {
         padding: 1rem 4rem;
         min-height: 70vh;
         display: flex;
@@ -201,6 +214,15 @@ const preview = () => {
         flex-direction: column;
         gap: 3rem;
         align-items: center;
+    }
+
+    .link-section {
+        font-weight: bold;
+        font-size: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
     }
 
     nav {
@@ -239,12 +261,6 @@ const preview = () => {
         padding: 1rem 2rem;
     }
 
-    .post-container {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
     .write {
         margin-top: 1rem;
     }
@@ -257,7 +273,7 @@ const preview = () => {
 
     #write {
         width: 100%;
-        max-width: 40rem;
+        max-width: 38rem;
         background-color: #23262e;
         outline: none;
         color: whitesmoke;
@@ -268,6 +284,7 @@ const preview = () => {
     .img-btn {
         height: 6rem;
         border-radius: 2rem;
+        width: 20rem;
     }
 
     input {
@@ -326,10 +343,6 @@ const preview = () => {
         border: 1px solid wheat;
     }
 
-    .panel h2 {
-        margin: 0;
-        font-size: 28px;
-    }
     .tags-container {
         display: flex;
         flex-direction: column;
@@ -397,6 +410,24 @@ const preview = () => {
         width: 100%;
     }
 
+    .tag {
+        background-color: #1C1F26;
+        color: whitesmoke;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .tag:hover {
+        text-decoration: line-through;
+    }
+
+    .btn-container {
+        width: 100%;
+        display: flex;
+        gap: 1rem;
+    }
+
     @media screen and (max-width: 775px) {
         button {
             width: 100%;
@@ -418,6 +449,13 @@ const preview = () => {
 
         .tags {
             width: 95%;
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+        .btn-container {
+            flex-direction: column;
+            margin-top: -2rem;
         }
     }
 </style>
