@@ -33,13 +33,14 @@
     }
 
 </script>
-
 <nav>
         <MediaQuery query="(min-width: {onNewsPage ? 780 : 850}px)" let:matches>
             {#if matches}
-            <div class="logo">
-                <h1>Space News 🚀</h1>
-            </div>
+            <a href="/">
+                <div class="logo">
+                    <h1>Space News 🚀</h1>
+                </div>
+            </a>
             <div class="links">
                 {#if !onNewsPage}
                 <a href="/"><Button>Feed</Button></a>
@@ -54,27 +55,31 @@
                 {#if showMobile}
                     <div class="mobile" transition:fly={{ delay: 250, duration: 200, y: -300, opacity: 0.5 }}>
                         <i class="fa-solid fa-x" on:click={() => showMobile = false}></i>
-                        <div class="logo">
-                            <h1>Space News 🚀</h1>
-                        </div>
+                        <a href="/">
+                            <div class="logo">
+                                <h1>Space News 🚀</h1>
+                            </div>
+                        </a>
                         {#if !onNewsPage}
                         <a href="/"><Button>Feed</Button></a>
                         {/if}
                         <a href="new-post"><Button><i class="fa-solid fa-plus"></i> New Post</Button></a>
-                        <a href="notifications"><Button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></Button></a>
+                        <a href="notifications"><Button>Notifications<i class="fa-regular fa-bell" style="margin-left: 0.5rem;"><span id= {hasNotifications && "notification"}></span></i></Button></a>
                         <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
                     </div>
                 {:else}
                     {#if transitionFinished}
-                         <div class="logo">
-                            <h1>Space News 🚀</h1>
-                        </div>
+                         <a href="/">
+                            <div class="logo">
+                                <h1>Space News 🚀</h1>
+                            </div>
+                        </a>
                         <i class="fa-solid fa-bars" on:click={() => showMobile = true}></i>
                     {/if}
                 {/if}
             {/if}
         </MediaQuery>
-</nav>
+    </nav>
 
 <style>
     nav {
@@ -135,5 +140,15 @@
         aspect-ratio: 1;
         background-color: red;
         border-radius: 50%;
+    }
+
+    .logo:hover {
+        cursor: pointer;
+        transition: 300ms ease;
+        opacity: 0.7;
+    }
+
+    a {
+        text-decoration: none;
     }
 </style>

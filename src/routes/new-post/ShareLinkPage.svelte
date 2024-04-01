@@ -1,6 +1,10 @@
 <script>
     import Article from "../../components/Article.svelte";
     import Modal from "../../components/Modal.svelte";
+    import { createEventDispatcher } from 'svelte'
+
+      const dispatch = createEventDispatcher()
+
     let submittedLink = false;
     let bodyText;
     let tagInputValue;
@@ -10,6 +14,7 @@
     let titleInput;
     let errorMsg = "";
     let postInfo = {url: "", title: "", image_url: "", id: "", summary: ""}
+    let linkInput;
 
     const addTag = () => {
         if (!tagInputValue) return;
@@ -28,7 +33,8 @@
     }
 
 const preview = () => {
-    const title = titleInput.value;
+    errorMsg = "";
+    const title = titleInput;
 
     if (!title) {
         errorMsg = "Title Required."
@@ -54,6 +60,50 @@ const scroll = () => {
             });
 }
 
+const submitLink = async () => {
+    errorMsg = "";
+    const link = linkInput.value;
+    if (!link || link.length < 3) {
+        errorMsg = "Please enter valid link."
+        return;
+    }
+    dispatch("loading", true);
+    try {
+        const res = await fetch('/api/parselink', {
+                method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ link: link }),
+            });
+            
+            const { info }  = await res.json();
+            //console.log(info);
+            if (Object.values(info).length === 0 && info.constructor === Object) {
+                errorMsg = "No data found from link."
+                return;
+            }
+            
+            postInfo = {
+                url: link,
+                title: info.title ?? "",
+                image_url: info.image ?? "",
+                summary: info.description ?? ""
+            }
+            submittedLink = true;
+            titleInput = info.title ?? "";
+            bodyText = info.description ?? "";
+
+    } catch (e) {
+        submittedLink = true;
+        console.log(e);
+        errorMsg = "Error getting info, please try again later."
+    } finally {
+        dispatch("loading", false)
+    }
+
+};
+
 $: {
         if (showModal) {
            if (typeof window != 'undefined' && window.document) {
@@ -69,16 +119,16 @@ $: {
 </script>
 
 {#if errorMsg}
-            <p id="error" style="margin-bottom: -4rem;">{errorMsg}</p>
+    <p id="error" style="margin-bottom: -2rem;">{errorMsg}</p>
 {/if}
 
 <div class="link-section" style="margin-bottom: -2rem;">
     <label for="">Link</label>
 </div>
-<div class="link-container">
-            <input type="text" maxlength="200">
-            <button style="padding: 0.7rem 1rem;" on:click={() => submittedLink = !submittedLink}>Get Link Info</button>
-</div>
+    <form class="link-container">
+        <input type="text" maxlength="200" bind:this={linkInput} name="link">
+        <button style="padding: 0.7rem 1rem;" on:click={submitLink}>Get Link Info</button>
+    </form>
             {#if submittedLink}
             <nav>
                     <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
@@ -105,7 +155,7 @@ $: {
                 <h1>Post Details</h1>
                 <div class="link-section">
                     <label for="">Title</label>
-                    <input type="text" maxlength="100" bind:this={titleInput}>
+                    <input type="text" maxlength="100" bind:value={titleInput}>
                 </div>
                 <div class="link-section">
                     <label for="">Summary</label>
@@ -115,7 +165,7 @@ $: {
                     <div class="link-section">
                         <label for="">Tags</label>
                     </div>
-                    <form action="">
+                    <form action="" class="tags-form">
                         <input type="text" maxlength="30" bind:value={tagInputValue}>
                         <div style="display: flex; gap: 1rem; margin-top: 1rem;">
                             <button on:click|preventDefault={addTag} type="submit">Add Tag</button>
@@ -250,7 +300,7 @@ $: {
         color: rgb(248, 62, 62);
     }
 
-    form {
+    .tags-form {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;

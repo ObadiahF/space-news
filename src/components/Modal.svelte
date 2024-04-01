@@ -13,6 +13,7 @@
 	let dialog; // HTMLDialogElement
   let showingComments = false;
   let showModal1 = false;
+  let tags = postInfo.tags ?? [];
 
   $: {
     if (isComments) {
@@ -111,12 +112,11 @@
                             {/if}
                             </MediaQuery>
                             <div class="tags">
-                                <div class="tag">
-                                    <span>#Space</span>
-                                </div>
-                                <div class="tag">
-                                    <span>#NASA</span>
-                                </div>
+                                {#each tags as tag}
+                                  <div class="tag">
+                                    <span>#{tag}</span>
+                                  </div>
+                                {/each}
                             </div>
                             <p>{postInfo.summary}</p>
                         {/if}

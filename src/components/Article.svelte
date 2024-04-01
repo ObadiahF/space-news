@@ -6,13 +6,14 @@
     export let index;
     export let preview = false;
     export let isUserMade = false;
+    export let tags = [];
 
     const dispatch = createEventDispatcher();
 </script>
 
 <div class="article">
     <div class="header">
-        <h3>#{isUserMade ? "UserMade": "Scraped"}</h3>
+        <h3>{isUserMade ? "User Made": "Scraped"}</h3>
         <button
         on:click={() => dispatch("share", {
             id,
@@ -41,7 +42,8 @@
         url,
         title,
         image_url,
-        summary
+        summary,
+        tags
     })} 
     on:share={() => dispatch("share", 
     {
@@ -50,7 +52,8 @@
         url,
         title,
         image_url,
-        summary
+        summary,
+        tags
     })}/>
 </div>
 

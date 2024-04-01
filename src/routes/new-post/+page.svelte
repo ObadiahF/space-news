@@ -2,7 +2,8 @@
 import Nav from '../../components/Nav.svelte'
 import Article from '../../components/Article.svelte'
 import Modal from '../../components/Modal.svelte';
-    import ShareLinkPage from './ShareLinkPage.svelte';
+import ShareLinkPage from './ShareLinkPage.svelte';
+import TopLoader from '../../components/TopLoader.svelte'
 
 let thumbnailInput;
 let titleInput;
@@ -16,6 +17,7 @@ let tagInputValue;
 let errorMsg = "";
 let postInfo = {url: "", title: "", image_url: "", id: "", summary: ""}
 let tags = [];
+let isLoading = false;
 
 $: {
     if (active) {
@@ -112,6 +114,7 @@ const preview = () => {
 </script>
 
 <Nav />
+<TopLoader isLoading={isLoading}/>
 
 <main>
     <div class="container">
@@ -199,7 +202,9 @@ const preview = () => {
                 </div>
                 {/if}
         {:else}
-            <ShareLinkPage />
+            <ShareLinkPage 
+            on:loading={(e) => isLoading = e.detail}
+            />
         {/if}
     </div>
 </main>
