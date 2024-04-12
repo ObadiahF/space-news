@@ -1,13 +1,14 @@
 <script>
     import { onMount } from 'svelte';
     import Nav from '../../components/Nav.svelte'
+    export let data;
     let notifications = [];
     notifications.length = 9
     onMount(() => {
 
     })
 </script>
-<Nav />
+<Nav session={data}/>
 <main class="{notifications.length === 0 && "none"}">
     {#if notifications.length === 0}
     <h1 class="none">No Notifications!</h1>

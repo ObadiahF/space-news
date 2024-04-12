@@ -4,7 +4,7 @@ import Article from '../../components/Article.svelte'
 import Modal from '../../components/Modal.svelte';
 import ShareLinkPage from './ShareLinkPage.svelte';
 import TopLoader from '../../components/TopLoader.svelte'
-
+export let data;
 let thumbnailInput;
 let titleInput;
 
@@ -113,7 +113,7 @@ const preview = () => {
     }
 </script>
 
-<Nav />
+<Nav session={data}/>
 <TopLoader isLoading={isLoading}/>
 
 <main>
