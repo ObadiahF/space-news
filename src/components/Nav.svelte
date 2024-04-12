@@ -5,16 +5,19 @@
     import ToolTip from './Tooltip.svelte'
     import '@fortawesome/fontawesome-free/css/all.min.css';
     import Button from './Button.svelte';
-
+    export let session = null;
     export let onNewsPage = false;
 
     let showMobile = false;
     let transitionFinished = true;
     let hasNotifications = true;
-
+    let isLoggedIn = false;
     onMount(() => {
+        isLoggedIn = session.session !== null && true
         //check for notifications
-    })
+    });
+
+    
 
     $: {
         if (showMobile) {
@@ -49,7 +52,11 @@
                 <ToolTip text={"Notifications"} isPointingDown={false}>
                     <a href="notifications"><Button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></Button></a>
                 </ToolTip>
-                <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
+                {#if isLoggedIn}
+                    <a href="logout"><Button>Sign Out <i class="fa-solid fa-right-from-bracket"></i></Button></a>
+                {:else}
+                     <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
+                {/if}
             </div>
             {:else}
                 {#if showMobile}
@@ -65,7 +72,11 @@
                         {/if}
                         <a href="new-post"><Button><i class="fa-solid fa-plus"></i> New Post</Button></a>
                         <a href="notifications"><Button>Notifications<i class="fa-regular fa-bell" style="margin-left: 0.5rem;"><span id= {hasNotifications && "notification"}></span></i></Button></a>
-                        <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
+                        {#if isLoggedIn}
+                            <a href="logout"><Button>Sign Out <i class="fa-solid fa-right-from-bracket"></i></Button></a>
+                        {:else}
+                            <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
+                        {/if}
                     </div>
                 {:else}
                     {#if transitionFinished}

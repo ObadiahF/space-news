@@ -1,11 +1,24 @@
 <script>
+    import { onMount } from "svelte";
     import ToolTip from "../../components/Tooltip.svelte";
+    import { goto } from "$app/navigation";
+    export let data;
+    export let form;
+
     let emailInput;
     let passwordInput;
     let errorMsg = "";
     let successMsg = "";
+    let isLoggedIn = false;
+    onMount(() => {
+        isLoggedIn = data.session !== null && true;
 
-    const signin = () => {
+        if (isLoggedIn) {
+            goto('/')
+        }
+    })
+
+    const signin = (event) => {
     //reset error msg
     errorMsg = "";
 
@@ -23,10 +36,18 @@
         errorMsg = 'Password must be at least 6 characters';
     }
 
-    if (errorMsg) return;
-
-    successMsg = "Success!"
+    if (errorMsg) {
+        event.preventDefault();
+        return;
+    };
+    event.target.submit();
 };
+
+$: {
+    if (form?.success === false) {
+        errorMsg = form.message;
+    }
+}
 
 
     const isValidEmail = (email) => {
@@ -44,14 +65,14 @@
             <a href="/"><i class="fa-solid fa-x"></i></a>
             </ToolTip>
         </div>
-        <form>
+        <form action="?/login" method="POST" on:submit={signin}>
                 <span class="error good">{successMsg}</span>
                 <span class="error">{errorMsg}</span>
             <div class="form-group">
                 <label for="username">Email</label>
                 <input type="text"
                     id="Email" 
-                    name="Email" 
+                    name="email" 
                     placeholder="Enter your Email" 
                     maxlength="50" 
                     bind:this={emailInput}
@@ -73,7 +94,7 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" on:click|preventDefault={signin}>Login</button>
+                <button type="submit">Login</button>
             </div>
         </form>
     </div>

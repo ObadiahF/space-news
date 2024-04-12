@@ -1,13 +1,29 @@
 <script>
+    import { onMount } from 'svelte';
+    import { goto } from '$app/navigation';
     import '@fortawesome/fontawesome-free/css/all.min.css';
     import ToolTip from '../../components/Tooltip.svelte'
+    export let form;
+    export let data;
+    
+    let isLoggedIn = false;
+    onMount(() => {
+        console.log(data);
+        isLoggedIn = data.session !== null && true;
+        console.log(isLoggedIn);
+
+        if (isLoggedIn) {
+            console.log('fire')
+            window.location = "/"
+        }
+    })
     let emailInput;
     let passwordInput;
     let confirmPasswordInput;
     let errorMsg = "";
     let successMsg = "";
 
-    const signin = () => {
+    const signin = (event) => {
     //reset error msg
     errorMsg = "";
 
@@ -20,17 +36,21 @@
         errorMsg = 'Email is required';
     } else if (!isValidEmail(email)) {
         errorMsg = 'Please enter a valid email address';
-    } else if (!password || comfirmPassword) {
+    } else if (!password || !comfirmPassword) {
         errorMsg = 'Password is required';
+        console.log([password, comfirmPassword])
     } else if (password.length < 6 || comfirmPassword.length < 6) {
         errorMsg = 'Password must be at least 6 characters';
     } else if (password !== comfirmPassword) {
         errorMsg = 'Passwords must match';
     }
 
-    if (errorMsg) return;
+    if (errorMsg) {
+        event.preventDefault();
+        return;
+    };
 
-    successMsg = "Success!"
+    event.target.submit();
 };
 
 
@@ -38,6 +58,12 @@
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
 };
+
+$: {
+    if (form?.success === false) {
+        errorMsg = form.message;
+    }
+}
 </script>
 
 
@@ -49,14 +75,14 @@
             <a href="/"><i class="fa-solid fa-x"></i></a>
             </ToolTip>
         </div>
-        <form>
+        <form action="?/register" method="POST" on:submit={signin}>
                 <span class="error good">{successMsg}</span>
                 <span class="error">{errorMsg}</span>
             <div class="form-group">
                 <label for="username">Email</label>
                 <input type="text"
                     id="Email" 
-                    name="Email" 
+                    name="email" 
                     placeholder="Enter your Email" 
                     maxlength="50" 
                     bind:this={emailInput}
@@ -86,7 +112,7 @@
             </div>
 
             <div class="form-group">
-                <button type="submit" on:click|preventDefault={signin}>Login</button>
+                <button type="submit">Sign Up</button>
             </div>
         </form>
     </div>

@@ -4,6 +4,7 @@
     import Skeleton from '../components/Skeleton.svelte';
     import Modal from '../components/Modal.svelte';
     import Nav from '../components/Nav.svelte'
+	export let data
 
     let articles = [];
     let nextUrl = 'https://api.spaceflightnewsapi.net/v4/articles/';
@@ -86,7 +87,7 @@
   });
 </script>
 
-<Nav onNewsPage={true}/>
+<Nav onNewsPage={true} session={data}/>
 <main class={showModal && "modal-open"}>
     <section class="articles-container">
         {#each articles as article, i}
