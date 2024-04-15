@@ -96,7 +96,7 @@
             {:else}
                 <Article 
                 postInfo={article}
-                index={i},
+                index={i}
                 tags={["Space"]}
                 on:comment={(e) => {
                     isComments = true;
