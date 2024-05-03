@@ -5,8 +5,10 @@
     import ToolTip from './Tooltip.svelte'
     import '@fortawesome/fontawesome-free/css/all.min.css';
     import Button from './Button.svelte';
+    import ProfileDropDown from './drop-downs/ProfileDropDown.svelte';
     export let session = null;
     export let onNewsPage = false;
+    const userName = 'test';
 
     let showMobile = false;
     let transitionFinished = true;
@@ -53,7 +55,7 @@
                     <a href="notifications"><Button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></Button></a>
                 </ToolTip>
                 {#if isLoggedIn}
-                    <a href="logout"><Button>Sign Out <i class="fa-solid fa-right-from-bracket"></i></Button></a>
+                    <ProfileDropDown/>
                 {:else}
                      <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
                 {/if}
@@ -73,7 +75,8 @@
                         <a href="new-post"><Button><i class="fa-solid fa-plus"></i> New Post</Button></a>
                         <a href="notifications"><Button>Notifications<i class="fa-regular fa-bell" style="margin-left: 0.5rem;"><span id= {hasNotifications && "notification"}></span></i></Button></a>
                         {#if isLoggedIn}
-                            <a href="logout"><Button>Sign Out <i class="fa-solid fa-right-from-bracket"></i></Button></a>
+                            <a href="user/{userName}"><Button><i class="fa-solid fa-user"></i> Profile</Button></a>
+                            <a href="settings"><Button><i class="fa-solid fa-gear"></i> Settings</Button></a>
                         {:else}
                             <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
                         {/if}
