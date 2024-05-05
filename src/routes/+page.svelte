@@ -4,6 +4,7 @@
     import Skeleton from '../components/Skeleton.svelte';
     import Modal from '../components/Modal.svelte';
     import Nav from '../components/Nav.svelte'
+    import NameModal from '../components/NameModal.svelte';
 	export let data
 
     let articles = [];
@@ -14,12 +15,18 @@
     let scrollIndicator;
     let skeletonsNeeded = 2;
     let firstTimeRendering = true;
+    let nameModal = false;
 
 
-    onMount(() => {
+    onMount( async () => {
         const skeletons = Array.from({ length: (10 + howManySkeletonsNeeded(10)) }, () => ({}));
         articles = [...skeletons];
         getNewsArticles();
+
+        if (!data.displayName) {
+            console.log('hi')
+            nameModal = true;
+        }
     });
 
     const getNewsArticles = async () => {
@@ -116,6 +123,7 @@
 -->
 
     <Modal bind:showModal postInfo={postInfo} isComments={isComments}/>
+    <NameModal showModal={nameModal}/>
 </main>
 
 <style>

@@ -77,6 +77,7 @@
                         {#if isLoggedIn}
                             <a href="user/{userName}"><Button><i class="fa-solid fa-user"></i> Profile</Button></a>
                             <a href="settings"><Button><i class="fa-solid fa-gear"></i> Settings</Button></a>
+                            <a href="logout"><Button><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</Button></a>
                         {:else}
                             <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
                         {/if}
