@@ -4,6 +4,7 @@
     export let showDropDown = false;
     export let dialog = undefined;
     export let postInfo;
+    export let info = {};
     export let isNav = false;
     import { fly } from "svelte/transition";
     import ListItems from "./ListItems.svelte";
@@ -21,8 +22,10 @@
     onMount(() => {
       if (!dialog) {
         document.addEventListener('click', handleClickOutside);
+        console.log('1')
       } else {
         dialog.addEventListener('click', handleClickOutside);
+        console.log('2')
       }
     });
 
@@ -41,7 +44,7 @@
         {#if showDropDown}
           <div class="dropdown-content option-drop-down nav" 
             transition:fly={{ delay: 10, duration: 100, y: 30, opacity: 0.5}}>
-            <ListItems isNav={isNav}/>
+            <ListItems isNav={isNav} info={info}/>
           </div>
       {/if}
     {:else}

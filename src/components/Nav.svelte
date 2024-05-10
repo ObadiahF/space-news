@@ -4,11 +4,12 @@
     import { fly, fade } from 'svelte/transition';
     import ToolTip from './Tooltip.svelte'
     import '@fortawesome/fontawesome-free/css/all.min.css';
+    import { userInfo as userInfoStore } from '../stores/userInfo'
     import Button from './Button.svelte';
     import ProfileDropDown from './drop-downs/ProfileDropDown.svelte';
     export let session = null;
     export let onNewsPage = false;
-    const userName = 'test';
+    let userInfo = {};
 
     let showMobile = false;
     let transitionFinished = true;
@@ -16,6 +17,15 @@
     let isLoggedIn = false;
     onMount(() => {
         isLoggedIn = session.session !== null && true
+
+        userInfoStore.subscribe(async (val) => {
+            if (!val) {
+                const res = await fetch('/api/getUserInfo');
+                const data = await res.json();
+                userInfo = data.userInfo[0];
+            }
+            console.log(val)
+        })
         //check for notifications
     });
 
@@ -55,7 +65,7 @@
                     <a href="notifications"><Button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></Button></a>
                 </ToolTip>
                 {#if isLoggedIn}
-                    <ProfileDropDown/>
+                    <ProfileDropDown userInfo={userInfo}/>
                 {:else}
                      <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
                 {/if}
@@ -75,7 +85,7 @@
                         <a href="new-post"><Button><i class="fa-solid fa-plus"></i> New Post</Button></a>
                         <a href="notifications"><Button>Notifications<i class="fa-regular fa-bell" style="margin-left: 0.5rem;"><span id= {hasNotifications && "notification"}></span></i></Button></a>
                         {#if isLoggedIn}
-                            <a href="user/{userName}"><Button><i class="fa-solid fa-user"></i> Profile</Button></a>
+                            <a href="user/{userInfo.user_name ?? ""}"><Button><i class="fa-solid fa-user"></i> Profile</Button></a>
                             <a href="settings"><Button><i class="fa-solid fa-gear"></i> Settings</Button></a>
                             <a href="logout"><Button><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</Button></a>
                         {:else}

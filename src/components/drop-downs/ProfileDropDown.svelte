@@ -2,6 +2,7 @@
     import { onMount ,onDestroy, createEventDispatcher } from "svelte";
     import OptionsDown from "./Options-down.svelte";
     let showModal = false;
+    export let userInfo;
 </script>
 
 
@@ -11,7 +12,8 @@
 <OptionsDown 
         showDropDown={showModal}
         on:closeDropDown={() => showModal = false}
-        isNav={true}
+        isNav={true},
+        info={userInfo}
 />
 
 <style>
