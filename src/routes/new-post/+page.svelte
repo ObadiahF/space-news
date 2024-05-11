@@ -5,7 +5,12 @@ import Modal from '../../components/Modal.svelte';
 import ShareLinkPage from './ShareLinkPage.svelte';
 import TopLoader from '../../components/TopLoader.svelte'
 import { onMount } from 'svelte';
+import Toasts from "../../components/toast/Toasts.svelte";
+import { addToast, clearToasts } from "../../components/toast/toaststore";
 export let data;
+
+let name = "";
+let display_name = "";
 let thumbnailInput;
 let titleInput;
 
@@ -20,6 +25,12 @@ let postInfo = {url: "", title: "", image_url: "", id: "", summary: ""}
 let tags = [];
 let isLoading = false;
 
+onMount(() => {
+    clearToasts()
+    name = data.userInfo.user_name;
+    display_name = data.userInfo.display_name
+})
+
 $: {
     if (active) {
         errorMsg = "";
@@ -31,20 +42,20 @@ const preview = () => {
     const thumbnail = postInfo.image_url;
 
     if (!title) {
-        errorMsg = "Title Required."
-        scroll()
+        fail(true)
         return;
     }
     if (!thumbnail) {
-        errorMsg = "Thumbnail Required."
-        scroll()
+        fail(false)
         return;
     }
+    /*
     if (!bodyText) {
         errorMsg = "Body Text Required."
         scroll()
         return;
     }
+    */
 
     postInfo.title = title;
     postInfo.summary = bodyText;
@@ -113,13 +124,64 @@ const preview = () => {
         }
     }
 
-    onMount(() => {
-        console.log(data)
-    })
+    const post = async (isDraft) => {
+        errorMsg = "";
+        isLoading = true;
+        postInfo.title = titleInput.value;
+        postInfo.summary = bodyText;
+
+        const { title} = postInfo;
+
+        if (!title) {
+        fail(true)
+        return;
+        }
+
+        if (!postInfo.image_url) {
+            fail(false)
+            return;
+        }
+        
+        try {
+            const res = await fetch('/api/post', {
+                    method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ 
+                            postInfo,
+                            isDraft,
+                            name,
+                            display_name,
+                            tags
+                        }),
+                });
+                
+                const data  = await res.json();
+                if (data.success) {
+                    addToast({ message: "Posted Successfully!", type: "success", dismissible: true, timeout: 0 })
+                } else {
+                    addToast({ message: "Error: Please try again later!", type: "error", dismissible: true, timeout: 0 })
+                }
+                scroll()
+        } catch (e) {
+            console.log(e);
+            addToast({ message: "Error: Please try again later!", type: "error", dismissible: true, timeout: 0 })
+        } finally {
+            isLoading = false;
+        }
+    }
+
+    const fail = (isFromTitle) => {
+        errorMsg = isFromTitle ? "Title Required." : "Thumbnail Required."
+        scroll()
+        isLoading = false;
+    }
 </script>
 
 <Nav session={data}/>
 <TopLoader isLoading={isLoading}/>
+<Toasts />
 
 <main>
     <div class="container">
@@ -187,8 +249,8 @@ const preview = () => {
                         </div>
                 </div>
                     <div class="btn-container">
-                        <button>Save Draft</button>
-                        <button>Post</button>
+                        <button on:click={() => post(true)}>Save Draft</button>
+                        <button on:click={() => post(false)}>Post</button>
                     </div>
                 {:else}
                 <div class="preview">

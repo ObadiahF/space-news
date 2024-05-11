@@ -2,7 +2,7 @@ import { supabaseClient as supabase } from '../../../lib/supabase'
 import { json } from '@sveltejs/kit'
 
 export const POST = async ({ request, locals }) => {
-    const { 
+    const {
         postInfo,
         isDraft,
         name,

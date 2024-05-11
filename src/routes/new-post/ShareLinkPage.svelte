@@ -2,6 +2,7 @@
     import Article from "../../components/Article.svelte";
     import Modal from "../../components/Modal.svelte";
     import { createEventDispatcher, onMount } from 'svelte'
+    import { addToast, clearToasts } from "../../components/toast/toaststore";
 
       const dispatch = createEventDispatcher()
 
@@ -21,9 +22,16 @@
     let display_name = "";
 
     onMount(() => {
+        clearToasts()
         name = userInfo.user_name;
         display_name = userInfo.display_name
     })
+
+     const fail = (isFromTitle) => {
+        errorMsg = isFromTitle ? "Title Required." : "Thumbnail Required."
+        scroll()
+        dispatch("loading", false);
+    }
 
     const addTag = () => {
         if (!tagInputValue) return;
@@ -46,13 +54,7 @@ const preview = () => {
     const title = titleInput;
 
     if (!title) {
-        errorMsg = "Title Required."
-        scroll()
-        return;
-    }
-    if (!bodyText) {
-        errorMsg = "Body Text Required."
-        scroll()
+        fail(true)
         return;
     }
 
@@ -89,8 +91,10 @@ const submitLink = async () => {
             const { info }  = await res.json();
             //console.log(info);
             if (Object.values(info).length === 0 && info.constructor === Object) {
-                errorMsg = "No data found from link."
-                return;
+                addToast({ message: "Error: No info found from link.", type: "error", dismissible: true, timeout: 0 })
+                scroll()
+                dispatch("loading", false)
+                linkInput.value = "";
             }
             
             postInfo = {
@@ -106,7 +110,7 @@ const submitLink = async () => {
     } catch (e) {
         submittedLink = true;
         console.log(e);
-        errorMsg = "Error getting info, please try again later."
+        addToast({ message: "Error: Please try again later!", type: "error", dismissible: true, timeout: 0 })
     } finally {
         dispatch("loading", false)
     }
@@ -127,9 +131,11 @@ $: {
 
 const post = async (isDraft) => {
     dispatch("loading", true);
+    postInfo.title = titleInput
+    postInfo.summary = bodyText
     const { title} = postInfo;
     if (!title) {
-        //handle no title
+        fail(true)
         return;
     }
     try {
@@ -148,11 +154,20 @@ const post = async (isDraft) => {
             });
             
             const data  = await res.json();
-            console.log(data);
+            if (data.success) {
+                addToast({ message: "Posted Successfully!", type: "success", dismissible: true, timeout: 0 })
+                linkInput.value = "";
+                titleInput = "";
+                bodyText = "";
+                tags = [];
+            } else {
+                addToast({ message: "Error: Please try again later!", type: "error", dismissible: true, timeout: 0 })
+            }
+            scroll();
 
     } catch (e) {
         console.log(e);
-        errorMsg = "Error posting, please try again later."
+        addToast({ message: "Error: Please try again later!", type: "error", dismissible: true, timeout: 0 })
     } finally {
         dispatch("loading", false)
     }
@@ -169,7 +184,7 @@ const post = async (isDraft) => {
 </div>
     <form class="link-container">
         <input type="text" maxlength="200" bind:this={linkInput} name="link">
-        <button style="padding: 0.7rem 1rem;" on:click={submitLink}>Get Link Info</button>
+        <button style="padding: 0.7rem 1rem;" on:click|preventDefault={submitLink}>Get Link Info</button>
     </form>
             {#if submittedLink}
             <nav>
