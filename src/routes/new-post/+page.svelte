@@ -1,5 +1,4 @@
 <script>
-import Nav from '../../components/Nav.svelte'
 import Article from '../../components/Article.svelte'
 import Modal from '../../components/Modal.svelte';
 import ShareLinkPage from './ShareLinkPage.svelte';
@@ -26,7 +25,6 @@ let tags = [];
 let isLoading = false;
 
 onMount(() => {
-    clearToasts()
     name = data.userInfo.user_name;
     display_name = data.userInfo.display_name
 })
@@ -179,7 +177,6 @@ const preview = () => {
     }
 </script>
 
-<Nav session={data}/>
 <TopLoader isLoading={isLoading}/>
 <Toasts />
 

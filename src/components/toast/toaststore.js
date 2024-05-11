@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+import { page } from '$app/stores';  
 
 export const toasts = writable([]);
 
@@ -29,3 +30,7 @@ export const dismissToast = (id) => {
 export const clearToasts = () => {
     toasts.set([]);
 }
+
+page.subscribe((val) => {
+    clearToasts();
+})

@@ -5,9 +5,9 @@
 </script>
 
 {#if isNav}
-    <a href="user/{info.user_name ?? ""}"><li role="button" class="nav"><i class="fa-solid fa-user"></i> Profile</li></a>
-    <a href="settings"><li role="button" class="nav"><i class="fa-solid fa-gear"></i> Settings</li></a>
-    <a href="logout"><li role="button" class="nav"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</li></a>
+    <a href="/user/{info.user_name ?? ""}"><li role="button" class="nav"><i class="fa-solid fa-user"></i> Profile</li></a>
+    <a href="/settings"><li role="button" class="nav"><i class="fa-solid fa-gear"></i> Settings</li></a>
+    <a href="/logout"><li role="button" class="nav"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</li></a>
     
 
 {:else} 

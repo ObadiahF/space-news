@@ -18,6 +18,7 @@
         isLoggedIn = session.session !== null && true
         //check for notifications
         userInfo = session.userInfo
+
     });
 
     
@@ -51,14 +52,14 @@
                 {#if !onNewsPage}
                 <a href="/"><Button>Feed</Button></a>
                 {/if}
-                <a href="new-post"><Button><i class="fa-solid fa-plus"></i> New Post</Button></a>
+                <a href="/new-post"><Button><i class="fa-solid fa-plus"></i> New Post</Button></a>
                 <ToolTip text={"Notifications"} isPointingDown={false}>
-                    <a href="notifications"><Button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></Button></a>
+                    <a href="/notifications"><Button><i class="fa-regular fa-bell"><span id= {hasNotifications && "notification"}></span></i></Button></a>
                 </ToolTip>
                 {#if isLoggedIn}
                     <ProfileDropDown userInfo={userInfo}/>
                 {:else}
-                     <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
+                     <a href="/login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
                 {/if}
             </div>
             {:else}
@@ -73,14 +74,14 @@
                         {#if !onNewsPage}
                         <a href="/"><Button>Feed</Button></a>
                         {/if}
-                        <a href="new-post"><Button><i class="fa-solid fa-plus"></i> New Post</Button></a>
-                        <a href="notifications"><Button>Notifications<i class="fa-regular fa-bell" style="margin-left: 0.5rem;"><span id= {hasNotifications && "notification"}></span></i></Button></a>
+                        <a href="/new-post"><Button><i class="fa-solid fa-plus"></i> New Post</Button></a>
+                        <a href="/notifications"><Button>Notifications<i class="fa-regular fa-bell" style="margin-left: 0.5rem;"><span id= {hasNotifications && "notification"}></span></i></Button></a>
                         {#if isLoggedIn}
-                            <a href="user/{userInfo.user_name ?? ""}"><Button><i class="fa-solid fa-user"></i> Profile</Button></a>
-                            <a href="settings"><Button><i class="fa-solid fa-gear"></i> Settings</Button></a>
-                            <a href="logout"><Button><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</Button></a>
+                            <a href="/user/{userInfo.user_name ?? ""}"><Button><i class="fa-solid fa-user"></i> Profile</Button></a>
+                            <a href="/settings"><Button><i class="fa-solid fa-gear"></i> Settings</Button></a>
+                            <a href="/logout"><Button><i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out</Button></a>
                         {:else}
-                            <a href="login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
+                            <a href="/login"><Button>Log In <i class="fa-solid fa-right-to-bracket"></i></Button></a>
                         {/if}
                     </div>
                 {:else}

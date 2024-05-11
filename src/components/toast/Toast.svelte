@@ -110,5 +110,11 @@
     margin: 0 0 0 auto;
     line-height: 1;
     font-size: 1rem;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  button:hover {
+    opacity: 0.7;
   }
 </style>

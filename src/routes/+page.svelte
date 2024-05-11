@@ -94,7 +94,6 @@
   });
 </script>
 
-<Nav onNewsPage={true} session={data}/>
 <main class={showModal && "modal-open"}>
     <section class="articles-container">
         {#each articles as article, i}
