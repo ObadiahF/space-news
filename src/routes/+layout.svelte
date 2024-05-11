@@ -4,7 +4,6 @@
     import { onMount } from 'svelte';
 
 
-
     onMount(() => {
         const {
             data: { subscription }

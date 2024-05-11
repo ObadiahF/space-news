@@ -1,10 +1,11 @@
 <script>
     import Article from "../../components/Article.svelte";
     import Modal from "../../components/Modal.svelte";
-    import { createEventDispatcher } from 'svelte'
+    import { createEventDispatcher, onMount } from 'svelte'
 
       const dispatch = createEventDispatcher()
 
+      export let userInfo = {};
     let submittedLink = false;
     let bodyText;
     let tagInputValue;
@@ -13,8 +14,16 @@
     let showModal = false;
     let titleInput;
     let errorMsg = "";
-    let postInfo = {url: "", title: "", image_url: "", id: "", summary: ""}
+    let postInfo = {url: "", title: "", image_url: "", summary: ""}
     let linkInput;
+
+    let name = "";
+    let display_name = "";
+
+    onMount(() => {
+        name = userInfo.user_name;
+        display_name = userInfo.display_name
+    })
 
     const addTag = () => {
         if (!tagInputValue) return;
@@ -116,6 +125,39 @@ $: {
         }
     }
 
+const post = async (isDraft) => {
+    dispatch("loading", true);
+    const { title} = postInfo;
+    if (!title) {
+        //handle no title
+        return;
+    }
+    try {
+        const res = await fetch('/api/post', {
+                method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        postInfo,
+                        isDraft,
+                        name,
+                        display_name,
+                        tags
+                    }),
+            });
+            
+            const data  = await res.json();
+            console.log(data);
+
+    } catch (e) {
+        console.log(e);
+        errorMsg = "Error posting, please try again later."
+    } finally {
+        dispatch("loading", false)
+    }
+}
+
 </script>
 
 {#if errorMsg}
@@ -179,8 +221,8 @@ $: {
                         </div>
                     </div>
                     <div class="btn-container">
-                        <button>Save Draft</button>
-                        <button>Post</button>
+                        <button on:click={() => post(true)}>Save Draft</button>
+                        <button on:click={() => post(false)}>Post</button>
                     </div>
                     {:else}
                         <div class="preview">

@@ -5,7 +5,7 @@
     import Modal from '../components/Modal.svelte';
     import Nav from '../components/Nav.svelte'
     import NameModal from '../components/NameModal.svelte';
-	export let data
+	export let data;
 
     let articles = [];
     let nextUrl = 'https://api.spaceflightnewsapi.net/v4/articles/';
@@ -23,8 +23,8 @@
         articles = [...skeletons];
         getNewsArticles();
 
-        if (!data.displayName) {
-            console.log('hi')
+        // show modal to set userName
+        if (!data.userInfo.display_name) {
             nameModal = true;
         }
     });

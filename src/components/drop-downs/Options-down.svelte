@@ -22,10 +22,8 @@
     onMount(() => {
       if (!dialog) {
         document.addEventListener('click', handleClickOutside);
-        console.log('1')
       } else {
         dialog.addEventListener('click', handleClickOutside);
-        console.log('2')
       }
     });
 

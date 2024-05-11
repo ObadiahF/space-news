@@ -4,7 +4,6 @@
     import { fly, fade } from 'svelte/transition';
     import ToolTip from './Tooltip.svelte'
     import '@fortawesome/fontawesome-free/css/all.min.css';
-    import { userInfo as userInfoStore } from '../stores/userInfo'
     import Button from './Button.svelte';
     import ProfileDropDown from './drop-downs/ProfileDropDown.svelte';
     export let session = null;
@@ -17,16 +16,8 @@
     let isLoggedIn = false;
     onMount(() => {
         isLoggedIn = session.session !== null && true
-
-        userInfoStore.subscribe(async (val) => {
-            if (!val) {
-                const res = await fetch('/api/getUserInfo');
-                const data = await res.json();
-                userInfo = data.userInfo[0];
-            }
-            console.log(val)
-        })
         //check for notifications
+        userInfo = session.userInfo
     });
 
     

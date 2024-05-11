@@ -4,6 +4,7 @@ import Article from '../../components/Article.svelte'
 import Modal from '../../components/Modal.svelte';
 import ShareLinkPage from './ShareLinkPage.svelte';
 import TopLoader from '../../components/TopLoader.svelte'
+import { onMount } from 'svelte';
 export let data;
 let thumbnailInput;
 let titleInput;
@@ -111,6 +112,10 @@ const preview = () => {
             }
         }
     }
+
+    onMount(() => {
+        console.log(data)
+    })
 </script>
 
 <Nav session={data}/>
@@ -204,6 +209,7 @@ const preview = () => {
         {:else}
             <ShareLinkPage 
             on:loading={(e) => isLoading = e.detail}
+            userInfo={data.userInfo}
             />
         {/if}
     </div>
